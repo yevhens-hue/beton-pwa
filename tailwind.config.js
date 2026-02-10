@@ -9,13 +9,23 @@ export default {
       colors: {
         background: "#0D0D0D",
         surface: "#1A1A1A",
-        primary: "#D4FF00", // Neon Lime
-        secondary: "#7A5CFF", // Vibrant Purple
-        accentRead: "#FF3B30",
+        primary: "#E2FF00",
+        secondary: "#E2FF00",
+        accent: "#6366F1",
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        display: ['Rajdhani', 'sans-serif'],
       },
+      animation: {
+        'float': 'float 6s ease-in-out infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-20px) rotate(5deg)' },
+        }
+      }
     },
   },
   plugins: [],
