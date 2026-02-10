@@ -1,14 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Trophy, Search, Gift, User } from 'lucide-react';
 import { cn } from './lib/utils';
 import HomeView from './pages/HomeView';
 import SportsView from './pages/SportsView';
 import ProfileView from './pages/ProfileView';
+import LoginView from './pages/LoginView';
 import { BetSlipProvider } from './context/BetSlipContext';
 import { BetSlip } from './components/BetSlip';
+import { NativeService } from './lib/native';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isInAllowedRegion, setIsInAllowedRegion] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkGeo = async () => {
+      const allowed = await NativeService.checkGeolocation();
+      setIsInAllowedRegion(allowed);
+    };
+    checkGeo();
+  }, []);
+
+  if (isInAllowedRegion === false) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background text-zinc-500 p-8 text-center">
+        Додаток доступний лише на території України згідно з ліцензійними вимогами.
+      </div>
+    );
+  }
+
+  if (!isLoggedIn) {
+    return <LoginView onLogin={() => setIsLoggedIn(true)} />;
+  }
 
   return (
     <BetSlipProvider>
