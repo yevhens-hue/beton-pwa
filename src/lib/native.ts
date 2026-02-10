@@ -37,5 +37,18 @@ export const NativeService = {
             console.error('Biometric auth failed', e);
             return false;
         }
+    },
+
+    // Open Diia app for signature
+    async openDiia() {
+        try {
+            // In a real app, we would use Browser plugin or a custom scheme
+            console.log('Opening Diia.Signature...');
+            // window.location.href = 'diia://...';
+            return true;
+        } catch (e) {
+            console.error('Failed to open Diia', e);
+            return false;
+        }
     }
 };
