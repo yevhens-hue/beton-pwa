@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Search, Bell, Plus, LayoutGrid, Layers, Globe, Star, Heart } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { HapticService } from '../lib/haptics';
 
-export default function HomeView() {
+export default function HomeView({ onOpenGame }: { onOpenGame: (id: string) => void }) {
     const [activeCategory, setActiveCategory] = useState('СЛОТИ');
 
     const categories = [
@@ -27,15 +28,29 @@ export default function HomeView() {
         { title: 'Tyranno 2', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=600&fit=crop', badge: 'Top', isNew: true },
     ];
 
+    const handleCategoryClick = (name: string) => {
+        HapticService.selectionChange();
+        setActiveCategory(name);
+    };
+
+    const handleGameClick = (id: string) => {
+        HapticService.mediumImpact();
+        onOpenGame(id);
+    };
+
+    const handleButtonClick = () => {
+        HapticService.lightImpact();
+    };
+
     return (
         <div className="flex-1 bg-background text-white min-h-screen">
             {/* Header */}
             <header className="px-6 pt-8 pb-4 flex items-center justify-between sticky top-0 z-30 bg-background/80 backdrop-blur-md">
                 <div className="flex items-center gap-4">
-                    <button className="w-10 h-10 rounded-full bg-surface border border-white/5 flex items-center justify-center text-zinc-400">
+                    <button onClick={handleButtonClick} className="w-10 h-10 rounded-full bg-surface border border-white/5 flex items-center justify-center text-zinc-400">
                         <Bell size={20} />
                     </button>
-                    <button className="w-10 h-10 rounded-full bg-surface border border-white/5 flex items-center justify-center text-zinc-400">
+                    <button onClick={handleButtonClick} className="w-10 h-10 rounded-full bg-surface border border-white/5 flex items-center justify-center text-zinc-400">
                         <Search size={20} />
                     </button>
                 </div>
@@ -45,7 +60,7 @@ export default function HomeView() {
                         <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Баланс</p>
                         <p className="text-lg font-display font-black tracking-tight">31 021 ₴</p>
                     </div>
-                    <button className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-[0_4px_12px_rgba(99,102,241,0.4)]">
+                    <button onClick={handleButtonClick} className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-[0_4px_12px_rgba(99,102,241,0.4)]">
                         <Plus size={24} />
                     </button>
                 </div>
@@ -64,7 +79,7 @@ export default function HomeView() {
                             260 000 ГРН<br />
                             <span className="text-primary">+ 400 ФС</span>
                         </h2>
-                        <button className="mt-4 bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase px-6 py-2.5 rounded-full border border-white/10 transition-colors">
+                        <button onClick={handleButtonClick} className="mt-4 bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase px-6 py-2.5 rounded-full border border-white/10 transition-colors">
                             Детальніше
                         </button>
                     </div>
@@ -78,7 +93,7 @@ export default function HomeView() {
                 {categories.map(cat => (
                     <button
                         key={cat.name}
-                        onClick={() => setActiveCategory(cat.name)}
+                        onClick={() => handleCategoryClick(cat.name)}
                         className={cn(
                             "flex items-center gap-2 px-6 py-3.5 rounded-2xl border transition-all shrink-0",
                             activeCategory === cat.name
@@ -95,7 +110,7 @@ export default function HomeView() {
             {/* Subcategories Filter */}
             <div className="px-6 mb-8 overflow-x-auto no-scrollbar flex gap-4">
                 {subCategories.map(sub => (
-                    <button key={sub.name} className="flex items-center gap-2 shrink-0 group">
+                    <button key={sub.name} onClick={handleButtonClick} className="flex items-center gap-2 shrink-0 group">
                         <div className="w-5 h-5 flex items-center justify-center text-zinc-500 group-hover:text-primary transition-colors">
                             <sub.icon size={18} />
                         </div>
@@ -111,12 +126,16 @@ export default function HomeView() {
                         <Star className="text-primary" size={18} fill="currentColor" />
                         <h3 className="text-md font-display font-black uppercase tracking-tight">BETON РЕКОМЕНДУЄ</h3>
                     </div>
-                    <button className="text-[10px] font-black text-zinc-500 uppercase">Усі</button>
+                    <button onClick={handleButtonClick} className="text-[10px] font-black text-zinc-500 uppercase">Усі</button>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                     {recommendedGames.map((game, i) => (
-                        <div key={i} className="relative group active:scale-95 transition-transform">
+                        <div
+                            key={i}
+                            onClick={() => handleGameClick(game.title)}
+                            className="relative group active:scale-95 transition-transform cursor-pointer"
+                        >
                             <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-white/5 bg-surface relative">
                                 <img src={game.image} alt={game.title} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500" />
 

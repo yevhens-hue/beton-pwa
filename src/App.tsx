@@ -9,12 +9,14 @@ import { BetSlip } from './components/BetSlip';
 import { NativeService } from './lib/native';
 import { BottomNavBar } from './components/BottomNavBar';
 import { DeepLinkHandler } from './components/DeepLinkHandler';
+import { GameLayout } from './components/GameLayout';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isInAllowedRegion, setIsInAllowedRegion] = useState<boolean | null>(null);
   const [isDepositOpen, setIsDepositOpen] = useState(false);
+  const [currentGameId, setCurrentGameId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkGeo = async () => {
@@ -39,16 +41,18 @@ function App() {
   return (
     <BetSlipProvider>
       <DeepLinkHandler
-        onGameOpen={(id) => {
-          console.log('Opening game:', id);
-          setActiveTab('home');
-        }}
+        onGameOpen={(id: string) => setCurrentGameId(id)}
         onDepositOpen={() => setIsDepositOpen(true)}
-        onNavigate={(tab) => setActiveTab(tab)}
+        onNavigate={(tab: string) => { setActiveTab(tab); setCurrentGameId(null); }}
       />
+
       <div className="flex flex-col h-screen bg-background text-white overflow-hidden max-w-md mx-auto border-x border-surface/20 shadow-2xl relative font-sans">
+        {/* Luxury Background Gradients */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/5 blur-[120px] rounded-full pointer-events-none"></div>
+
         <main className="flex-1 overflow-y-auto no-scrollbar relative pb-32">
-          {activeTab === 'home' && <HomeView />}
+          {activeTab === 'home' && <HomeView onOpenGame={(id) => setCurrentGameId(id)} />}
           {activeTab === 'sports' && <SportsView />}
           {activeTab === 'search' && (
             <div className="flex items-center justify-center h-full text-zinc-500">
@@ -65,7 +69,18 @@ function App() {
           <BetSlip />
         </main>
 
-        <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+        {!currentGameId && (
+          <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+        )}
+
+        {/* Global Game Overlay */}
+        {currentGameId && (
+          <GameLayout
+            gameId={currentGameId}
+            onBack={() => setCurrentGameId(null)}
+            onDeposit={() => { setIsDepositOpen(true); }}
+          />
+        )}
       </div>
     </BetSlipProvider>
   );
