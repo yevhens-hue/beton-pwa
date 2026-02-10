@@ -8,11 +8,13 @@ import LoginView from './pages/LoginView';
 import { BetSlipProvider } from './context/BetSlipContext';
 import { BetSlip } from './components/BetSlip';
 import { NativeService } from './lib/native';
+import { DeepLinkHandler } from './components/DeepLinkHandler';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isInAllowedRegion, setIsInAllowedRegion] = useState<boolean | null>(null);
+  const [isDepositOpen, setIsDepositOpen] = useState(false);
 
   useEffect(() => {
     const checkGeo = async () => {
@@ -36,6 +38,14 @@ function App() {
 
   return (
     <BetSlipProvider>
+      <DeepLinkHandler
+        onGameOpen={(id) => {
+          console.log('Opening game:', id);
+          setActiveTab('home');
+        }}
+        onDepositOpen={() => setIsDepositOpen(true)}
+        onNavigate={(tab) => setActiveTab(tab)}
+      />
       <div className="flex flex-col h-screen bg-background text-white overflow-hidden max-w-md mx-auto border-x border-surface/20 shadow-2xl relative">
         <main className="flex-1 overflow-y-auto no-scrollbar relative pb-20">
           {activeTab === 'home' && <HomeView />}
@@ -50,7 +60,9 @@ function App() {
               Bonuses content coming soon
             </div>
           )}
-          {activeTab === 'profile' && <ProfileView />}
+          {activeTab === 'profile' && (
+            <ProfileView isDepositOpen={isDepositOpen} setIsDepositOpen={setIsDepositOpen} />
+          )}
 
           <BetSlip />
         </main>

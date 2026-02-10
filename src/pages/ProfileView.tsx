@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { CreditCard, ChevronRight, Settings, History, HelpCircle, LogOut } from 'lucide-react';
 import { DepositModal } from '../components/DepositModal';
 
-function ProfileView() {
+function ProfileView({ isDepositOpen, setIsDepositOpen }: { isDepositOpen: boolean, setIsDepositOpen: (o: boolean) => void }) {
     const [balance] = useState(12450.00);
-    const [isDepositOpen, setIsDepositOpen] = useState(false);
 
     return (
         <div className="flex-1 overflow-y-auto no-scrollbar relative min-h-screen">
             <DepositModal isOpen={isDepositOpen} onClose={() => setIsDepositOpen(false)} />
+
 
             {/* Profile Header */}
             <header className="p-8 pb-32 bg-gradient-to-b from-secondary to-background border-b border-white/5 relative bg-secondary/20">
