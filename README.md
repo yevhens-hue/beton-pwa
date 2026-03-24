@@ -1,31 +1,38 @@
-# Beton Web App
+# 📱 Progressive Web App (PWA) Native Shell
 
-This is a **Progressive Web App (PWA)** implementation of the Beton sports betting platform, designed to mimic the native iOS experience. It uses modern web technologies to run in any browser without needing Xcode or iOS devices.
+A high-performance frontend architecture packaged as a Progressive Web App (PWA). Developed to provide a seamless, native-app-like experience directly within the mobile browser.
 
-## Tech Stack
-- **React** (Framework)
-- **Vite** (Build Tool)
-- **Tailwind CSS** (Styling)
-- **Lucide React** (Icons)
+## 📊 Overview
+Building fast and responsive frontend architectures requires bypassing traditional web views. This repository demonstrates how to integrate modern web capabilities to achieve native app speeds:
 
-## Features
-- **Responsive Design**: Looks like a native app on mobile devices.
-- **Home Screen**: Promotions, balance, and game categories.
-- **Sports Betting**: Live/Prematch toggle, odds display.
-- **User Profile**: Wallet management and settings.
+- **Offline Support:** Users can continue interacting with the application even when the network drops.
+- **App Installation:** Bypasses App Stores by allowing users to "Install" the dashboard directly to their home screen via the Web App Manifest.
+- **Responsive Fluidity:** Layout adapts to any screen size instantly without jitter.
 
-## How to Run
+## 🛠 Tech Stack
+- **TypeScript** (Strict frontend typing)
+- **Service Workers** (Background synchronization and caching)
+- **PWA Specifications** (Manifest.json, Web APIs)
 
-1. Open a terminal in the project folder.
-2. Run the development server:
-   ```bash
-   npm run dev
-   ```
-3. Open the link shown in the terminal (usually `http://localhost:5173`) in your browser.
-4. For the best experience, use Chrome DevTools and toggle "Device Toolbar" (Cmd+Shift+M) to simulate a mobile device (iPhone 14/15 Pro).
+## 💡 Key Features
 
-## Project Structure
-- `src/App.tsx`: Main entry point with bottom navigation.
-- `src/pages/`: Individual screens (Home, Sports, Profile).
-- `src/components/`: Reusable UI components.
-- `src/lib/`: Utilities.
+### 1. Advanced Caching Strategies
+The Service Worker intercepts network requests and serves cached static assets instantly:
+- ⚡ **CACHE-FIRST:** Loads the UI in milliseconds, updating data silently in the background.
+- 🔄 **BACKGROUND SYNC:** Allows users to queue data changes offline, which are automatically pushed to the server once the connection is restored.
+
+### 2. Native System Integration
+Push notifications capability and full-screen standalone mode makes the web app completely indistinguishable from an iOS/Android native application.
+
+## 🚀 How to Run
+
+1. **Clone and Install:**
+```bash
+git clone https://github.com/yevhens-hue/beton-pwa.git
+npm install
+```
+
+2. **Start Dev Server:**
+```bash
+npm run dev
+```
